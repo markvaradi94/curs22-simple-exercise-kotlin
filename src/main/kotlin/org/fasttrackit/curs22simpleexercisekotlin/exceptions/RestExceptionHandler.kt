@@ -12,9 +12,9 @@ class RestExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleNoSuchElementException(exception: ResourceNotFoundException): ApiError = ApiError(exception.message)
+    fun handleResourceNotFoundException(exception: ResourceNotFoundException): ApiError = ApiError(exception.message)
 }
 
 class ResourceNotFoundException(override val message: String) : RuntimeException()
 
-data class ApiError(val message: String?)
+data class ApiError(val message: String)

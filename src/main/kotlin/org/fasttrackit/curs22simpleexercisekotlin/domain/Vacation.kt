@@ -28,7 +28,6 @@ class VacationReader() {
         if (!file.exists()) throw RuntimeException("Could not find the file in classpath $fileLocation")
     }
 
-
     fun read(): List<Vacation> {
         val result = mutableListOf<Vacation>()
         try {
@@ -47,7 +46,7 @@ class VacationReader() {
         } catch (exception: IOException) {
             System.err.println(exception.message)
         }
-        return result
+        return result.toList()
     }
 
 }
