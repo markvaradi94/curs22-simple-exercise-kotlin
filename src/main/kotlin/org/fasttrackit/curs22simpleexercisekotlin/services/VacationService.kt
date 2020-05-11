@@ -4,6 +4,8 @@ import org.fasttrackit.curs22simpleexercisekotlin.domain.Vacation
 import org.fasttrackit.curs22simpleexercisekotlin.exceptions.ResourceNotFoundException
 import org.fasttrackit.curs22simpleexercisekotlin.repositories.VacationRepository
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors.toList
+import java.util.stream.StreamSupport
 
 @Service
 class VacationService(val vacationRepository: VacationRepository) {
@@ -12,10 +14,15 @@ class VacationService(val vacationRepository: VacationRepository) {
 
     fun getVacationById(id: Int) = getOrThrow(id)
 
-    fun vacationsInLocation(location: String) = getAllVacations()
+    fun vacationsInLocation(location: String): List<Vacation> = StreamSupport
+            .stream(vacationRepository.findAll().spliterator(), false)
             .filter { it.location.equals(location, ignoreCase = true) }
+            .collect(toList())
 
-    fun vacationsWithPriceLowerThan(maxPrice: Int) = getAllVacations().filter { it.price <= maxPrice }
+    fun vacationsWithPriceLowerThan(maxPrice: Int): List<Vacation> = StreamSupport
+            .stream(vacationRepository.findAll().spliterator(), false)
+            .filter { it.price <= maxPrice }
+            .collect(toList())
 
     fun add(vacation: Vacation) = vacationRepository.save(vacation)
 

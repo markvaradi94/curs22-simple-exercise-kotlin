@@ -30,10 +30,9 @@ class VacationReader() {
 
     fun read(): List<Vacation> {
         val result = mutableListOf<Vacation>()
-        try {
-            val inputStream: InputStream = file.inputStream
+        val inputStream: InputStream = file.inputStream
+        inputStream.use {
             val scanner = Scanner(inputStream)
-            scanner.useDelimiter("[|]")
             while (scanner.hasNextLine()) {
                 val tokens = scanner.nextLine().split("|")
                 result.add(Vacation(
@@ -42,11 +41,8 @@ class VacationReader() {
                         tokens[2].toInt()
                 ))
             }
-            inputStream.close()
-        } catch (exception: IOException) {
-            System.err.println(exception.message)
         }
-        return result.toList()
+        return result
     }
 
 }

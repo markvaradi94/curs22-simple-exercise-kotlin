@@ -9,17 +9,15 @@ import org.springframework.web.bind.annotation.*
 class VacationController(val vacationService: VacationService) {
 
     @GetMapping
-    fun getAll(@RequestParam(required = false) maxPrice: Int?): List<Vacation> {
-        return if (maxPrice == null) vacationService.getAllVacations()
-        else vacationService.vacationsWithPriceLowerThan(maxPrice)
+    fun getAll(@RequestParam(required = false) maxPrice: Int?,
+               @RequestParam(required = false) location: String?): List<Vacation> {
+        return if (maxPrice == null && location == null) vacationService.getAllVacations()
+        else if (maxPrice != null && location == null) vacationService.vacationsWithPriceLowerThan(maxPrice)
+        else vacationService.vacationsInLocation(location.toString())
     }
 
     @GetMapping("{id}")
     fun getVacationById(@PathVariable(required = false) id: Int) = vacationService.getVacationById(id)
-
-    @GetMapping("/location/{location}")
-    fun vacationsInLocation(@PathVariable(required = false) location: String) =
-            vacationService.vacationsInLocation(location)
 
     @PostMapping
     fun addVacation(@RequestBody vacation: Vacation) = vacationService.add(vacation)
